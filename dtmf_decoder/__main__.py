@@ -15,6 +15,7 @@ import math
 import time
 import numpy as np
 import sounddevice as sd
+import matplotlib
 import matplotlib.pyplot as plt
 from dtmf_decoder.command_decoder import CommandDecoder
 from dtmf_decoder.helpers import clear_console, goertzel, \
@@ -240,6 +241,8 @@ if __name__ == '__main__':
 
     if command == 'live-plot':
         live_plot = True
+
+        matplotlib.use('TkAgg')
 
         plt.figure(figsize=(10, 6))
 
