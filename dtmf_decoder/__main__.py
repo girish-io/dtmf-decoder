@@ -133,6 +133,9 @@ def plot_signal(signal):
     plt.title('Input Signal')
     plt.plot(t, frames)
 
+    plt.xlabel('Time (s)')
+    plt.ylabel('Amplitude')
+
     # Plot the goertzel result on the input signal
     plt.subplot(2, 1, 2)
     plt.cla()
@@ -161,9 +164,12 @@ def plot_signal(signal):
         arrowprops={'arrowstyle': '<-'}
     )
 
+    plt.xlabel('Frequency (Hz)')
+    plt.ylabel('Energy')
+
     plt.ylim([1, 30000])
 
-    plt.subplots_adjust(hspace=0.5)
+    plt.subplots_adjust(hspace=0.8)
 
     # Save the plot
     # plt.savefig('dtmf-plot.png')
