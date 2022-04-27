@@ -26,7 +26,7 @@ from dtmf_decoder.helpers import clear_console, goertzel, \
 FS = 8000
 
 # How many seconds to read data from the source input before detecting signals (in seconds)
-SAMPLE_WINDOW = 15 / 1000.0 #15 / 1000.0
+SAMPLE_WINDOW = 15 / 1000.0
 
 SAMPLE_SIZE = math.ceil(FS * SAMPLE_WINDOW)
 
@@ -110,13 +110,19 @@ BANNER = r'''
 '''
 
 
-def plot_signal(frames, freqs, results, **kwargs):
-    pressed_key = kwargs['pressed_key']
-    f_low = kwargs['f_low']
-    energy_low = kwargs['energy_low']
+def plot_signal(signal):
+    frames = signal['frames']
+    freqs = signal['freqs']
+    results = signal['results']
+    pressed_key = signal['pressed_key']
 
-    f_high = kwargs['f_high']
-    energy_high = kwargs['energy_high']
+    f_low = signal['f_low']
+    closest_low = signal['closest_low']
+    energy_low = signal['energy_low']
+
+    f_high = signal['f_high']
+    closest_high = signal['closest_high']
+    energy_high = signal['energy_high']
 
     # Plot the input signal
     plt.subplot(2, 1, 1)
@@ -138,7 +144,28 @@ def plot_signal(frames, freqs, results, **kwargs):
 
     plt.stem(freqs, np.array(results)[:,2], linefmt=':')
 
+    plt.gca().annotate(
+        f'{f_low:.1f} (@{closest_low} Hz)',
+        xy=(f_low, energy_low),
+        xytext=(f_low + 50, energy_low),
+        color='purple',
+        arrowprops={'arrowstyle': '<-'}
+    )
+
+    plt.gca().annotate(
+        f'{f_high:.1f} (@{closest_high} Hz)',
+        xy=(f_high, energy_high),
+        xytext=(f_high + 50, energy_high),
+        color='purple',
+        arrowprops={'arrowstyle': '<-'}
+    )
+
+    plt.ylim([1, 30000])
+
     plt.subplots_adjust(hspace=0.5)
+
+    # Save the plot
+    # plt.savefig('dtmf-plot.png')
 
     plt.pause(0.5)
 
@@ -183,8 +210,10 @@ def decoded_signals():
                 yield {
                     'pressed_key': pressed_key,
                     'f_low': f_low,
+                    'closest_low': closest_low,
                     'energy_low': energy_low,
                     'f_high': f_high,
+                    'closest_high': closest_high,
                     'energy_high': energy_high,
                     'frames': frames_np,
                     'freqs': freqs,
@@ -211,6 +240,8 @@ if __name__ == '__main__':
 
     if command == 'live-plot':
         live_plot = True
+
+        plt.figure(figsize=(10, 6))
 
         # Get the current screen dimensions
         screen_width = plt.get_current_fig_manager().window.winfo_screenwidth()
@@ -246,13 +277,4 @@ if __name__ == '__main__':
             print(signal['pressed_key'], end='', flush=True)
 
         if live_plot:
-            plot_signal(
-                frames=signal['frames'],
-                freqs=signal['freqs'],
-                results=signal['results'],
-                pressed_key=signal['pressed_key'],
-                f_low=signal['f_low'],
-                energy_low=signal['energy_low'],
-                f_high=signal['f_high'],
-                energy_high=signal['energy_high']
-            )
+            plot_signal(signal)
