@@ -1,6 +1,10 @@
 # DTMF Decoder
 Decoder for [dual-tone multi-frequency (DTMF)](https://en.wikipedia.org/wiki/Dual-tone_multi-frequency_signaling) signals.
 
+## Demo video
+
+[![Decoding Dual-tone multi-frequency (DTMF) Signals](https://img.youtube.com/vi/P_0rXalOwGE/0.jpg)](https://www.youtube.com/watch?v=P_0rXalOwGE)
+
 ## Setup
 1. Install dependencies
 ```
@@ -44,6 +48,4 @@ The decoding process works in the following series of steps:
 </p>
 
 ## Note
-I am by no means an expert in the domain of Digital Signal Processing;
-
 I thought this was a fun project to do in my free time to get the basic idea of how DTMF signaling works and was mainly inspired by [this scene](https://www.youtube.com/watch?v=tOLr1pkdr9Q) from The Hummingbird Project where Anton sent commands to his computer over a telephone network from jail.
